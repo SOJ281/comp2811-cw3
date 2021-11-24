@@ -25,17 +25,37 @@ public:
 
      TheButton(QWidget *parent) :  QPushButton(parent) {
          setIconSize(QSize(200,110));
-         connect(this, SIGNAL(released()), this, SLOT (clicked() )); // if QPushButton clicked...then run clicked() below
+         connect(this, SIGNAL(released()), this, SLOT (clicked())); // if QPushButton clicked...then run clicked() below
     }
 
     void init(TheButtonInfo* i);
 
+
 private slots:
     void clicked();
+    //void pausePlay();
 
 signals:
     void jumpTo(TheButtonInfo*);
 
 };
+
+
+class ControlButton : public TheButton {
+    Q_OBJECT
+
+public:
+    void init(TheButtonInfo* i);
+    ControlButton(QWidget *parent) :  TheButton(parent) {
+        setIconSize(QSize(80,80));
+        connect(this, SIGNAL(released()), this, SLOT (clicked())); // if QPushButton clicked...then run clicked() below
+   }
+
+private slots:
+    //void clicked();
+
+signals:
+};
+
 
 #endif //CW2_THE_BUTTON_H

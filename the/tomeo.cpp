@@ -26,6 +26,8 @@
 #include "the_player.h"
 #include "the_button.h"
 
+#include <string>
+
 // read in videos and thumbnails to this directory
 std::vector<TheButtonInfo> getInfoIn (std::string loc) {
 
@@ -36,6 +38,7 @@ std::vector<TheButtonInfo> getInfoIn (std::string loc) {
     while (it.hasNext()) { // for all files
 
         QString f = it.next();
+        std::cout<< f.toStdString() <<std::endl;
 
             if (f.contains("."))
 
@@ -52,7 +55,7 @@ std::vector<TheButtonInfo> getInfoIn (std::string loc) {
                     if (!sprite.isNull()) {
                         QIcon* ico = new QIcon(QPixmap::fromImage(sprite)); // voodoo to create an icon for the button
                         QUrl* url = new QUrl(QUrl::fromLocalFile( f )); // convert the file location to a generic url
-                        out . push_back(TheButtonInfo( url , ico  ) ); // add to the output list
+                        out.push_back(TheButtonInfo(url, ico)); // add to the output list
                     }
                     else
                         qDebug() << "warning: skipping video because I couldn't process thumbnail " << thumb << endl;
@@ -63,6 +66,35 @@ std::vector<TheButtonInfo> getInfoIn (std::string loc) {
     }
 
     return out;
+}
+
+std::vector<TheButtonInfo> getInfo (std::string loc) {
+
+    std::vector<TheButtonInfo> out =  std::vector<TheButtonInfo>();
+    QDir dir(QString::fromStdString(loc) );
+    QDirIterator it(dir);
+    std::cout<< "f.toStdString()" <<std::endl;
+
+    while (it.hasNext()) { // for all files
+
+        QString f = it.next();
+        if (f.contains(".png"))  {
+        std::cout<< f.toStdString() <<std::endl;
+
+        QString thumb = f.left( f .length() - 4) +".png";
+        QImageReader *imageReader = new QImageReader(thumb);
+        QImage sprite = imageReader->read(); // read the thumbnail
+        QIcon* ico = new QIcon(QPixmap::fromImage(sprite)); // voodoo to create an icon for the button
+        QUrl* url = new QUrl(QUrl::fromLocalFile(f)); // convert the file location to a generic url
+        out . push_back(TheButtonInfo(url, ico)); // add to the output list
+        }
+    }
+
+    return out;
+}
+
+void buttonPressed() {
+
 }
 
 
@@ -78,7 +110,7 @@ int main(int argc, char *argv[]) {
     std::vector<TheButtonInfo> videos;
 
     if (argc == 2)
-        videos = getInfoIn( std::string(argv[1]) );
+        videos = getInfoIn(std::string(argv[1])+"/videos");
 
     if (videos.size() == 0) {
 
@@ -112,16 +144,46 @@ int main(int argc, char *argv[]) {
     // a list of the buttons
     std::vector<TheButton*> buttons;
     // the buttons are arranged horizontally
-    QHBoxLayout *layout = new QHBoxLayout();
-    buttonWidget->setLayout(layout);
+    QVBoxLayout *right = new QVBoxLayout();
+    buttonWidget->setLayout(right);
 
 
-    // create the four buttons
-    for ( int i = 0; i < 4; i++ ) {
+    //control buttons panel
+    std::vector<TheButtonInfo> control = getInfo(std::string(argv[1])+"/buttons"); //array of buttons
+    //Array of buttons, order here determines order of buttons
+    std::vector<QString> buttonTypes = {"sDown.png", "pause.png", "fForward.png", "save.png", "stop.png", "reload.png"};
+    QHBoxLayout *leftBottom = new QHBoxLayout();
+
+    for(QString i : buttonTypes) { //Loops through buttons types
+        for(TheButtonInfo bc : control) { //loops through button info
+            if(!(bc.url->fileName().compare(i))) { //if both same buttontype
+                ControlButton *funcBotton = new ControlButton(buttonWidget);
+                funcBotton->setMinimumHeight(70);
+                funcBotton->setMaximumHeight(70);
+                funcBotton->setMinimumWidth(70);
+                funcBotton->setMaximumWidth(70);
+                leftBottom->addWidget(funcBotton);
+                funcBotton->init(&bc);
+                funcBotton->setIconSize(QSize(70, 70));
+                if(!(bc.url->fileName().compare("pause.png")))
+                    funcBotton->connect(funcBotton, SIGNAL(clicked()), player, SLOT(pausePlay())); // when clicked, tell the player to play.
+            }
+        }
+    }
+
+
+
+
+    QVBoxLayout *left = new QVBoxLayout();
+    left->addWidget(videoWidget);
+    left->addLayout(leftBottom);
+
+    // create the 7 video buttons
+    for ( int i = 0; i < 6; i++) {
         TheButton *button = new TheButton(buttonWidget);
         button->connect(button, SIGNAL(jumpTo(TheButtonInfo* )), player, SLOT (jumpTo(TheButtonInfo*))); // when clicked, tell the player to play.
         buttons.push_back(button);
-        layout->addWidget(button);
+        right->addWidget(button);
         button->init(&videos.at(i));
     }
 
@@ -130,13 +192,13 @@ int main(int argc, char *argv[]) {
 
     // create the main window and layout
     QWidget window;
-    QVBoxLayout *top = new QVBoxLayout();
+    QHBoxLayout *top = new QHBoxLayout();
     window.setLayout(top);
     window.setWindowTitle("tomeo");
     window.setMinimumSize(800, 680);
 
     // add the video and the buttons to the top level widget
-    top->addWidget(videoWidget);
+    top->addLayout(left);
     top->addWidget(buttonWidget);
 
     // showtime!
