@@ -44,6 +44,7 @@ public slots:
 
     // start playing this ButtonInfo
     void jumpTo (TheButtonInfo* button);
+
 };
 
 #endif //CW2_THE_PLAYER_H

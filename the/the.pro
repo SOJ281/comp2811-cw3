@@ -10,10 +10,16 @@ CONFIG += c++11
 SOURCES += \
         the_button.cpp \
         the_player.cpp \
+        scroll_layout.cpp \
+        scroll_window.cpp \
+        video_scroll.cpp \
         tomeo.cpp
 
 HEADERS += \
     the_button.h \
+    scroll_layout.h \
+    scroll_window.h \
+    video_scroll.h \
     the_player.h
 
 # Default rules for deployment.

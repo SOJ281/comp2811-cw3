@@ -41,18 +41,22 @@ signals:
 };
 
 
+//Class contains all control buttons (pause play etc)
 class ControlButton : public TheButton {
     Q_OBJECT
-
 public:
+    TheButtonInfo* second;
+
     void init(TheButtonInfo* i);
+    void multiple(TheButtonInfo* i);
     ControlButton(QWidget *parent) :  TheButton(parent) {
         setIconSize(QSize(80,80));
-        connect(this, SIGNAL(released()), this, SLOT (clicked())); // if QPushButton clicked...then run clicked() below
+        connect(this, SIGNAL(released()), this, SLOT (clicked()));
    }
 
 private slots:
-    //void clicked();
+    void clicked();
+    void switching(TheButtonInfo* i);
 
 signals:
 };
