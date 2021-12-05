@@ -15,7 +15,7 @@ VideoScroll::VideoScroll(QString name, std::vector<TheButton*> *buttons, int lay
 
 VideoScroll::VideoScroll(QString name, std::vector<TheButton*> *buttons, int layout, QString colour) : QScrollArea() {
     setWhatsThis(name); //Used as identifier later
-    setWidget(new ScrollWindow(buttons, layout));
+    setWidget(new class ScrollWindow(buttons, layout));
     setWidgetResizable(true);
     QColor qc (colour);
     qc = qc.darker(150);

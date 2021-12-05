@@ -5,7 +5,7 @@
 #include "the_button.h"
 
 #include <QtCore/QDir>
-
+#include <QStyle>
 #include <iostream>
 
 void TheButton::init(TheButtonInfo* i) {
@@ -39,40 +39,44 @@ void ControlButton::init(TheButtonInfo* i) {
     std::cout<<i->url->fileName().toStdString()<<std::endl;
 }
 
+//get icon for each control button
+void ControlButton::addIcon(QString str) {
+    if (!str.compare("sDown")){
+        setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
+    }
+    else if (!str.compare("pause")){
+        setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+        //setAccessibleName("stop");
+    }
+    else if (!str.compare("fForward")){
+        setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
+    }
+    else if (!str.compare("save")){
+        setIcon(style()->standardIcon(QStyle::SP_DialogSaveButton));
+    }
+    else if (!str.compare("stop")){
+        setIcon(style()->standardIcon(QStyle::SP_MediaStop));
+    }
+    else if (!str.compare("reload")){
+        setIcon(style()->standardIcon(QStyle::SP_BrowserReload));
+    }
+    else if (!str.compare("add")){
+        setIcon(style()->standardIcon(QStyle::SP_ArrowUp));
+    }
+}
+
+
 void ControlButton::multiple(TheButtonInfo* i) {
     //setIcon( *(i->icon) );
     second =  i;
     std::cout<<i->url->fileName().toStdString()<<std::endl;
 }
 
-void ControlButton::switching(TheButtonInfo* i) {
-    std::cout<<"attempting" <<std::endl;
-    //setIcon( *(info->icon) );
-    //init(info);
-    //std::cout<<"success" <<std::endl;
-    if(i->url->fileName().compare("play.png") || i->url->fileName().compare("pause.png")){
-      //  init(info);
-        setIcon( *(second->icon) );
-        //TheButtonInfo temp = *info;
-        //*info = *second;
-        //*second = temp;
-    }
-
+void ControlButton::switching() {
+    setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
 }
 
 void ControlButton::clicked() {
-    //std::cout<<"attempting" <<std::endl;
-    //setIcon( *(info->icon) );
-    //init(info);
-    //std::cout<<"success" <<std::endl;
-    //if(info->url->fileName().compare("play.png") || info->url->fileName().compare("pause.png")){
-      //  init(info);
-        //setIcon( *(second->icon) );
-        //TheButtonInfo temp = *info;
-        //*info = *second;
-        //*second = temp;
-    //}
-
     emit jumpTo(info);
 }
 

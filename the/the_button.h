@@ -48,6 +48,7 @@ public:
     TheButtonInfo* second;
 
     void init(TheButtonInfo* i);
+    void addIcon(QString str);
     void multiple(TheButtonInfo* i);
     ControlButton(QWidget *parent) :  TheButton(parent) {
         setIconSize(QSize(80,80));
@@ -56,7 +57,7 @@ public:
 
 private slots:
     void clicked();
-    void switching(TheButtonInfo* i);
+    void switching();
 
 signals:
 };

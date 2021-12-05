@@ -27,3 +27,15 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
+DISTFILES += \
+    buttons/add.png \
+    buttons/dragDrop.png \
+    buttons/fForward.png \
+    buttons/pause.png \
+    buttons/play.png \
+    buttons/reload.png \
+    buttons/sDown.png \
+    buttons/stop.png
+
+RESOURCES +=
+
