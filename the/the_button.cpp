@@ -18,20 +18,10 @@ void TheButton::init(TheButtonInfo* i) {
 void TheButton::clicked() {
     emit jumpTo(info);
 }
-/*
-void TheButton::pausePlay() {
-    switch (info->url->fileName()) {
-      case QMediaPlayer::State::PausedState:
-        play(); // starting playing again...
-        break;
-      case QMediaPlayer::PlayingState:
-        pause();
-        break;
-      default:
-        break;
-    }
+
+void TheButton::square() {
+    setMaximumHeight(width());
 }
-*/
 
 void ControlButton::init(TheButtonInfo* i) {
     setIcon( *(i->icon) );
@@ -41,12 +31,12 @@ void ControlButton::init(TheButtonInfo* i) {
 
 //get icon for each control button
 void ControlButton::addIcon(QString str) {
+    setWhatsThis(str);
     if (!str.compare("sDown")){
         setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
     }
-    else if (!str.compare("pause")){
-        setIcon(style()->standardIcon(QStyle::SP_MediaPause));
-        //setAccessibleName("stop");
+    else if (!str.compare("play")){
+        setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
     }
     else if (!str.compare("fForward")){
         setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
@@ -72,8 +62,17 @@ void ControlButton::multiple(TheButtonInfo* i) {
     std::cout<<i->url->fileName().toStdString()<<std::endl;
 }
 
-void ControlButton::switching() {
-    setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+void ControlButton::switching(QMediaPlayer::State state) {
+    switch (state) {
+      case QMediaPlayer::State::PausedState:
+        setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+        break;
+      case QMediaPlayer::PlayingState:
+        setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+        break;
+      default:
+        break;
+    }
 }
 
 void ControlButton::clicked() {

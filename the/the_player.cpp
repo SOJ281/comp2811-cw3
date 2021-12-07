@@ -52,14 +52,14 @@ void ThePlayer::pausePlay() {
 
 //haven't finished yet error: audio device not support changing rate
 void ThePlayer::play_fast(){
-    setMuted(true);
+    //setMuted(true);
     qreal rate = 2;
     setPlaybackRate(rate);
 }
 
 //haven't finished yet error: audio device not support changing rate
 void ThePlayer::re_wind(){
-    setMuted(true);
+    //setMuted(true);
     qreal rate = -2;
     setPlaybackRate(rate);
 }
@@ -67,12 +67,12 @@ void ThePlayer::re_wind(){
 //stop button, back to beginning and stop
 void ThePlayer::stop_player(){
     stop();
-    pause();
 }
 
 //reload button, restart the video
 void ThePlayer::replay(){
-    stop();
+    setPosition(0);
+    starter = 0;
 }
 
 void ThePlayer::checkTime(qint64 time) {
@@ -93,6 +93,32 @@ void DurLabel::setPos(qint64 pos) {
 void DurLabel::setDur(qint64 dura) {
     duration = dura;
 }
+
+QString calcTime(qint64 time) {
+    time = time /1000;
+    qint64 minutes = time/60;
+    qint64 hours = minutes/60;
+    if (minutes > 0)
+        time = time % minutes;
+    if (hours > 0)
+        minutes = minutes % hours;
+    QString endTime = "";
+    if (time < 10)
+        endTime += "0";
+    endTime += QString::number(time) + ":";
+
+    if (minutes < 10)
+        endTime += "0";
+    endTime += QString::number(minutes) + ":";
+
+    endTime += QString::number(hours);
+
+    return endTime;
+}
+
 void DurLabel::setTimeStamp() {
-    setText(QString::number(position/1000)+"/"+QString::number(duration/1000));
+    //quint64 pos;
+    //setText(QString::number(position/1000, 'G', 2)+"/"+QString::number(duration/1000));
+    //double posit = position;
+    setText(calcTime(position)+"/"+calcTime(duration));
 }

@@ -147,29 +147,31 @@ int main(int argc, char *argv[]) {
     std::vector<TheButtonInfo> control = getInfo(std::string(argv[1])+"/button353"); //array of buttons
 
     //Array of buttons, order here determines order of buttons
-    std::vector<QString> buttonTypes = {"sDown", "pause", "fForward", "save", "stop", "reload", "add"};
+    std::vector<QString> buttonTypes = {"sDown", "play", "fForward", "save", "stop", "reload", "add"};
     QHBoxLayout *leftBottom = new QHBoxLayout();
+    QHBoxLayout *leftBottomL = new QHBoxLayout();
 
     for(QString i : buttonTypes){
         //adding new control buttons
         ControlButton *button = new ControlButton(buttonWidget);
-        leftBottom->addWidget(button);
+        leftBottomL->addWidget(button);
         button->setMaximumSize(60, 60);
         button->setMinimumSize(60, 60);
         button->setIconSize(QSize(100, 100));
         button->addIcon(i);
+        button->connect(button, SIGNAL(resizeEvent(QSize)), button, SLOT(square()));
 
         //functionalities for each button
-        if (!(i.compare("pause"))) {
-          button->connect(button, SIGNAL(jumpTo(TheButtonInfo*)), button, SLOT(switching()));
+        if (!(i.compare("play"))) {
           button->connect(button, SIGNAL(clicked()), player, SLOT(pausePlay()));
-        }else if (!(i.compare("fForward"))){
+          button->connect(player, SIGNAL(stateChanged(QMediaPlayer::State)), button, SLOT(switching(QMediaPlayer::State)));
+        }else if (!(i.compare("fForward"))) {
           button->connect(button, SIGNAL(clicked()), player, SLOT(play_fast()));
-        }else if (!(i.compare("sDown"))){
+        }else if (!(i.compare("sDown"))) {
             button->connect(button, SIGNAL(clicked()), player, SLOT(re_wind()));
-        }else if (!(i.compare("stop"))){
+        }else if (!(i.compare("stop"))) {
           button->connect(button, SIGNAL(clicked()), player, SLOT(stop_player()));
-        }else if (!(i.compare("reload"))){
+        }else if (!(i.compare("reload"))) {
           button->connect(button, SIGNAL(clicked()), player, SLOT(replay()));
         }else if (!(i.compare("save"))){
           button->setIconSize(QSize(30, 30));
@@ -197,6 +199,8 @@ int main(int argc, char *argv[]) {
           QWidget *dialogueBox = new QWidget;
           QHBoxLayout *lay = new QHBoxLayout();
           QLabel* title = new QLabel("Title:");
+          QFont font("Calibri Light", 16);
+          title->setFont(font);
           title->setMinimumSize(70, 30);
           title->setMaximumSize(70, 30);
           lay->addWidget(title);
@@ -213,8 +217,7 @@ int main(int argc, char *argv[]) {
           backLayout->addLayout(lay);
 
           QVBoxLayout *lowerLay = new QVBoxLayout();
-          //lowerLay->addWidget(bee);
-          for (TheButtonInfo ac : control) {
+          for (TheButtonInfo ac : getInfo(std::string(argv[1])+"/buttons")) {
             if(!(ac.url->fileName().compare("dragDrop.png"))) {
               ControlButton *downButton = new ControlButton(buttonWidget);
               downButton->setMinimumSize(400, 100);
@@ -237,26 +240,33 @@ int main(int argc, char *argv[]) {
           button->connect(button, SIGNAL(clicked()), dialogueBox, SLOT(show())); // when clicked, tell the player to play.
         }
     }
+
+    QHBoxLayout *leftBottomR = new QHBoxLayout();
     //audio control
     QSlider* slider = new QSlider(Qt::Horizontal);
     slider->setRange(1, 100);
+    slider->setMaximumWidth(120);
+    slider->setMinimumWidth(80);
     slider->setTickPosition(QSlider::TicksBothSides);
-    leftBottom->addWidget(slider);
+    leftBottomR->addWidget(slider);
+    leftBottomR->setAlignment(slider, Qt::AlignRight);
     player->connect(slider, SIGNAL(valueChanged(int)), player, SLOT(setVolume(int)));
 
     //label shows time
     DurLabel * duration = new DurLabel();
     duration->setText(QString::number(player->duration()));
-    leftBottom->addWidget(duration);
-    duration->setMaximumSize(60, 60);
-    duration->setMinimumSize(60, 60);
-    player->connect(player, SIGNAL(durationChanged(qint64)), duration, SLOT (setDur(qint64))); // when clicked, tell the player to play.
-    player->connect(player, SIGNAL(positionChanged(qint64)), duration, SLOT (setPos(qint64))); // when clicked, tell the player to play.
-    player->connect(player, SIGNAL(positionChanged(qint64)), player, SLOT (checkTime(qint64))); // when clicked, tell the player to play.
+    leftBottomR->addWidget(duration);
+    leftBottomR->setAlignment(duration, Qt::AlignRight);
+    player->connect(player, SIGNAL(durationChanged(qint64)), duration, SLOT (setDur(qint64)));
+    player->connect(player, SIGNAL(positionChanged(qint64)), duration, SLOT (setPos(qint64)));
+    player->connect(player, SIGNAL(positionChanged(qint64)), player, SLOT (checkTime(qint64)));
+    player->connect(player, SIGNAL(clicked()), player, SLOT (pausePlay()));
 
+    leftBottom->addLayout(leftBottomL);
+    leftBottom->addLayout(leftBottomR);
 
     QSpacerItem *space = new QSpacerItem(60,60, QSizePolicy::MinimumExpanding);
-    leftBottom->addItem(space);
+    leftBottomL->addItem(space);
 
     QVBoxLayout *left = new QVBoxLayout();
     left->addWidget(videoWidget);
