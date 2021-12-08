@@ -7,6 +7,8 @@
 
 #include <QPushButton>
 #include <QUrl>
+//#include <QMediaPlayer::MediaStatus>
+#include <QMediaPlayer>
 
 class TheButtonInfo {
 
@@ -33,7 +35,7 @@ public:
 
 private slots:
     void clicked();
-    //void pausePlay();
+    void square();
 
 signals:
     void jumpTo(TheButtonInfo*);
@@ -48,6 +50,7 @@ public:
     TheButtonInfo* second;
 
     void init(TheButtonInfo* i);
+    void addIcon(QString str);
     void multiple(TheButtonInfo* i);
     ControlButton(QWidget *parent) :  TheButton(parent) {
         setIconSize(QSize(80,80));
@@ -56,7 +59,7 @@ public:
 
 private slots:
     void clicked();
-    void switching(TheButtonInfo* i);
+    void switching(QMediaPlayer::State state);
 
 signals:
 };

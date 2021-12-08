@@ -20,11 +20,14 @@ ScrollWindow::ScrollWindow(std::vector<TheButton*> * buttons, int layout) {
 
     if (layout == 1) {
         QVBoxLayout * rl = new QVBoxLayout();
+        QSpacerItem *space = new QSpacerItem(0,0, QSizePolicy::MinimumExpanding);
+        rl->addItem(space);
+        //rl->setAlignment (alignment )
         for(TheButton* i : *buttons) {
-            std::cout << "Counting" << std::endl;
             i -> setWhatsThis("button");
             rl->addWidget(i);
            }
+        rl->addStretch();
         setLayout(rl);
      } else {
         ScrollLayout * rl = new ScrollLayout();
@@ -35,6 +38,7 @@ ScrollWindow::ScrollWindow(std::vector<TheButton*> * buttons, int layout) {
            }
         setLayout(rl);
     }
+
 
     //createWidgets();
 }

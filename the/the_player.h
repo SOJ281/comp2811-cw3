@@ -1,4 +1,4 @@
-  //
+//
 // Created by twak on 11/11/2019.
 //
 
@@ -11,6 +11,8 @@
 #include "the_button.h"
 #include <vector>
 #include <QTimer>
+
+#include <QLabel>
 
 class ThePlayer : public QMediaPlayer {
 
@@ -27,6 +29,7 @@ public:
         setVolume(0); // be slightly less annoying
         connect (this, SIGNAL (stateChanged(QMediaPlayer::State)), this, SLOT (playStateChanged(QMediaPlayer::State)) );
     }
+    int starter = 1;
 
     // all buttons have been setup, store pointers here
     void setContent(std::vector<TheButton*>* b, std::vector<TheButtonInfo>* i);
@@ -38,10 +41,34 @@ private slots:
 
     void playStateChanged (QMediaPlayer::State ms);
 
-public slots:
+    void pausePlay();
 
+    void play_fast();
+
+    void re_wind();
+
+    void stop_player();
+
+    void replay();
+
+    void checkTime(qint64);
+
+public slots:
     // start playing this ButtonInfo
     void jumpTo (TheButtonInfo* button);
+
+};
+
+class DurLabel : public QLabel {
+Q_OBJECT
+public:
+    qint64 position;
+    qint64 duration;
+    void setTimeStamp();
+
+private slots:
+    void setPos(qint64);
+    void setDur(qint64);
 };
 
 #endif //CW2_THE_PLAYER_H
