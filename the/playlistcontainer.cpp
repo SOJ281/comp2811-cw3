@@ -45,7 +45,6 @@ PlaylistContainer::PlaylistContainer(QString playlistName, int videosCount, QStr
 
   name = new QLabel(playlistName);
   counter = new QLabel(QString::number(videosCount) + " items");
-  vidNumber = videosCount;
 
   // Arrange the layout of the container
   auto *bottom = new QHBoxLayout();

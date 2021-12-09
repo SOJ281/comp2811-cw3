@@ -21,8 +21,6 @@ private:
   QPushButton *playbutton;
   QLabel *counter;
   QCheckBox *check;
-public:
-  int vidNumber;
 
 signals:
 };

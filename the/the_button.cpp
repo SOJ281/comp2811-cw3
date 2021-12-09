@@ -19,10 +19,6 @@ void TheButton::clicked() {
     emit jumpTo(info);
 }
 
-void TheButton::square() {
-    setMaximumHeight(width());
-}
-
 void ControlButton::init(TheButtonInfo* i) {
     setIcon( *(i->icon) );
     info =  i;
@@ -53,13 +49,6 @@ void ControlButton::addIcon(QString str) {
     else if (!str.compare("add")){
         setIcon(style()->standardIcon(QStyle::SP_ArrowUp));
     }
-}
-
-
-void ControlButton::multiple(TheButtonInfo* i) {
-    //setIcon( *(i->icon) );
-    second =  i;
-    std::cout<<i->url->fileName().toStdString()<<std::endl;
 }
 
 void ControlButton::switching(QMediaPlayer::State state) {

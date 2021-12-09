@@ -35,7 +35,6 @@ public:
 
 private slots:
     void clicked();
-    void square();
 
 signals:
     void jumpTo(TheButtonInfo*);
@@ -51,7 +50,6 @@ public:
 
     void init(TheButtonInfo* i);
     void addIcon(QString str);
-    void multiple(TheButtonInfo* i);
     ControlButton(QWidget *parent) :  TheButton(parent) {
         setIconSize(QSize(80,80));
         connect(this, SIGNAL(released()), this, SLOT (clicked()));

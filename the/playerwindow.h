@@ -40,6 +40,8 @@ class PlayerWindow : public QWidget {
 public:
   explicit PlayerWindow(QWidget *parent = nullptr);
   void assemble(int argc, char *argv[]);
+  // collect all the videos in the folder
+  std::vector<TheButtonInfo> videos;
 
 private:
   std::vector<TheButtonInfo> getInfoIn (std::string loc);

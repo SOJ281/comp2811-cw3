@@ -102,9 +102,6 @@ std::vector<TheButtonInfo> PlayerWindow::getInfo (std::string loc) {
 
 void PlayerWindow::assemble(int argc, char *argv[]) {
 
-    // collect all the videos in the folder
-    std::vector<TheButtonInfo> videos;
-
     if (argc == 2)
         videos = getInfoIn(std::string(argv[1])+"/videos");
 

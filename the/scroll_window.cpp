@@ -29,28 +29,5 @@ ScrollWindow::ScrollWindow(std::vector<TheButton*> * buttons, int layout) {
            }
         rl->addStretch();
         setLayout(rl);
-     } else {
-        ScrollLayout * rl = new ScrollLayout();
-        for(TheButton* i : *buttons) {
-            std::cout << "Counting" << std::endl;
-            i -> setWhatsThis("button");
-            rl->addWidget(i);
-           }
-        setLayout(rl);
-    }
-
-
-    //createWidgets();
-}
-
-void ScrollWindow::createWidgets() {
-
-    ScrollLayout * rl = new ScrollLayout();
-    QWidget *buttonWidget = new QWidget();
-    for ( int i = 0; i < 4; i++ ) {
-        TheButton *button = new TheButton(buttonWidget);
-        button->setWhatsThis("button");
-        rl->addWidget(button);
-    }
-    setLayout(rl);
+     }
 }
