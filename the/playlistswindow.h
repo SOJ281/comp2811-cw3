@@ -25,11 +25,13 @@ private:
   QWidget *scrollAreaContents;
 
   inline int randomNumber(int max);
-  void randomPlaylists(QLayout *scrollAreaContentsLayout, bool order = true);
+  void randomPlaylists(QLayout *scrollAreaContentsLayout, bool order = true, int number = 24);
   void deleteLayout(QLayout *layout);
 
 private slots:
   void fakeSort(int index);
+  void fakeFilter();
+
 signals:
 };
 

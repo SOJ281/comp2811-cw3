@@ -77,10 +77,10 @@ void PlaylistsWindow::arrangeWidgets() {
   // Body stuff
   auto *body = new QHBoxLayout();
 
-  // Setup scrollarea
-  auto *scrollAreaContentsLayout = new ScrollGridLayout(0);
-  scrollAreaContents->setLayout(scrollAreaContentsLayout);
+  // Scroll
+  ScrollGridLayout *scrollAreaContentsLayout = nullptr;
   scroll->setWidget(scrollAreaContents);
+  // Setup scrollarea
   randomPlaylists(scrollAreaContentsLayout);
 
   body->addWidget(scroll);
@@ -94,49 +94,70 @@ void PlaylistsWindow::arrangeWidgets() {
 
 void PlaylistsWindow::makeConnections() {
   connect(sort, SIGNAL(currentIndexChanged(int)), this, SLOT(fakeSort(int)));
+  connect(search, SIGNAL(clicked(bool)), this, SLOT(fakeFilter()));
 }
 
+// Shitty way to generate a pseudo-random number but I don't care
 inline int PlaylistsWindow::randomNumber(int max) { return (rand() % max) + 1; }
 
+// This sort just changes the playlists randomly, lol
 void PlaylistsWindow::fakeSort(int index) { randomPlaylists(scroll->widget()->layout(), false); }
 
-void PlaylistsWindow::randomPlaylists(QLayout *scrollAreaContentsLayout, bool order) {
+// It just displays 2 random playlists
+void PlaylistsWindow::fakeFilter() {
+  // If it's empty, just regenerate the whole thing
+  if (searchQuery->text() != "")
+    randomPlaylists(scroll->widget()->layout(), false, 2);
+  else
+    randomPlaylists(scroll->widget()->layout(), true);
+}
 
+void PlaylistsWindow::randomPlaylists(QLayout *scrollAreaContentsLayout, bool order, int number) {
+
+  // Check for nullptr
   if (scrollAreaContentsLayout)
     deleteLayout(scrollAreaContentsLayout);
 
   scrollAreaContentsLayout = new ScrollGridLayout(0);
+
   // Set this layout as the scollAreaContent's layout
   scroll->widget()->setLayout(scrollAreaContentsLayout);
 
+  // Populate the layout with mock playlists
   int it = 0;
-  for (int i = 0; i < 8; ++i) {
-    for (int j = 0; j < 3; ++j) {
-      ++it;
-      PlaylistContainer *mockPlaylist;
-      if (order)
-        mockPlaylist =
-            new PlaylistContainer("myPlaylist " + QString::number(it), randomNumber(100));
-      else
-        mockPlaylist = new PlaylistContainer("myPlaylist " + QString::number(randomNumber(100)),
-                                             randomNumber(100));
-      scrollAreaContentsLayout->addWidget(mockPlaylist);
-    }
+  for (int i = 0; i < number; ++i) {
+    ++it;
+    PlaylistContainer *mockPlaylist;
+    if (order)
+      mockPlaylist = new PlaylistContainer("myPlaylist " + QString::number(it), randomNumber(100));
+    else
+      mockPlaylist = new PlaylistContainer("myPlaylist " + QString::number(randomNumber(100)),
+                                           randomNumber(100));
+    scrollAreaContentsLayout->addWidget(mockPlaylist);
   }
 }
 
 void PlaylistsWindow::deleteLayout(QLayout *layout) {
+  // Deleting a layout does not delete its child widgets by default
   QLayout *sublayout;
   QWidget *widget;
+
+  // Delete all its children until it's empty
   while (!layout->isEmpty()) {
     auto item = layout->takeAt(0);
+    // If it's a nested layout, recursive call
     if ((sublayout = item->layout()) != 0)
       deleteLayout(sublayout);
+    // If it's a widget, hide it and delete it
     else if ((widget = item->widget()) != 0) {
       widget->hide();
       delete widget;
-    } else
+    }
+    // Otherwise just delete it
+    else
       delete item;
   }
+
+  // Finally, delete the layout
   delete layout;
 }
