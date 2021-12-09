@@ -74,3 +74,4 @@ void ControlButton::disapear() {
 void ControlButton::showIt() {
     show();
 }
+

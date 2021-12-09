@@ -29,3 +29,4 @@ ScrollWindow::ScrollWindow(std::vector<TheButton*> * buttons, int layout) {
         rl->addStretch();
         setLayout(rl);
      }
+}
