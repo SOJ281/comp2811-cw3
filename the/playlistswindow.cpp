@@ -3,6 +3,11 @@
 #include "playlistcontainer.h"
 #include "scrollgridlayout.h"
 #include "sidebar.h"
+#include <QComboBox>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QScrollArea>
+#include <QString>
 
 PlaylistsWindow::PlaylistsWindow(QWidget *parent) : QWidget(parent) {
   createWidgets();
@@ -17,7 +22,7 @@ void PlaylistsWindow::createWidgets() {
   const QStringList list{"Sort by: name", "Sort by: creation date", "Sort by: last played",
                          "Sort by: video count"};
   sort->addItems(list);
-  sort->setFixedSize(120, 36);
+  sort->setFixedSize(130, 36);
   sort->setStyleSheet("QComboBox {border: 1px solid; border-radius: 4px;}");
 
   searchQuery = new QLineEdit();
@@ -32,13 +37,16 @@ void PlaylistsWindow::createWidgets() {
 
   scroll = new QScrollArea();
   scrollAreaContents = new QWidget();
+  scroll->setFrameShape(QFrame::NoFrame);
+  scroll->setWidgetResizable(true);
+  scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+  scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 void PlaylistsWindow::arrangeWidgets() {
 
   // Divide window in left toolbar area and remaining area
   auto *mainLayout = new QHBoxLayout();
-  auto *leftToolBar = new QVBoxLayout();
   auto *centerLayout = new QVBoxLayout();
 
   // Populate left toolbar
@@ -71,25 +79,9 @@ void PlaylistsWindow::arrangeWidgets() {
 
   // Setup scrollarea
   auto *scrollAreaContentsLayout = new ScrollGridLayout(0);
-
   scrollAreaContents->setLayout(scrollAreaContentsLayout);
-
-  int it = 0;
-  for (int i = 0; i < 8; ++i) {
-    for (int j = 0; j < 3; ++j) {
-      ++it;
-      auto *mockPlaylist =
-          new PlaylistContainer("myPlaylist " + QString::number(it), randomNumber(100));
-      // mockPlaylist->setFixedSize(300, 200);
-      scrollAreaContentsLayout->addWidget(mockPlaylist);
-    }
-  }
-
   scroll->setWidget(scrollAreaContents);
-  scroll->setFrameShape(QFrame::NoFrame);
-  scroll->setWidgetResizable(true);
-  scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-  scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  randomPlaylists(scrollAreaContentsLayout);
 
   body->addWidget(scroll);
 
@@ -100,6 +92,51 @@ void PlaylistsWindow::arrangeWidgets() {
   setLayout(mainLayout);
 }
 
-void PlaylistsWindow::makeConnections() {}
+void PlaylistsWindow::makeConnections() {
+  connect(sort, SIGNAL(currentIndexChanged(int)), this, SLOT(fakeSort(int)));
+}
 
 inline int PlaylistsWindow::randomNumber(int max) { return (rand() % max) + 1; }
+
+void PlaylistsWindow::fakeSort(int index) { randomPlaylists(scroll->widget()->layout(), false); }
+
+void PlaylistsWindow::randomPlaylists(QLayout *scrollAreaContentsLayout, bool order) {
+
+  if (scrollAreaContentsLayout)
+    deleteLayout(scrollAreaContentsLayout);
+
+  scrollAreaContentsLayout = new ScrollGridLayout(0);
+  // Set this layout as the scollAreaContent's layout
+  scroll->widget()->setLayout(scrollAreaContentsLayout);
+
+  int it = 0;
+  for (int i = 0; i < 8; ++i) {
+    for (int j = 0; j < 3; ++j) {
+      ++it;
+      PlaylistContainer *mockPlaylist;
+      if (order)
+        mockPlaylist =
+            new PlaylistContainer("myPlaylist " + QString::number(it), randomNumber(100));
+      else
+        mockPlaylist = new PlaylistContainer("myPlaylist " + QString::number(randomNumber(100)),
+                                             randomNumber(100));
+      scrollAreaContentsLayout->addWidget(mockPlaylist);
+    }
+  }
+}
+
+void PlaylistsWindow::deleteLayout(QLayout *layout) {
+  QLayout *sublayout;
+  QWidget *widget;
+  while (!layout->isEmpty()) {
+    auto item = layout->takeAt(0);
+    if ((sublayout = item->layout()) != 0)
+      deleteLayout(sublayout);
+    else if ((widget = item->widget()) != 0) {
+      widget->hide();
+      delete widget;
+    } else
+      delete item;
+  }
+  delete layout;
+}
