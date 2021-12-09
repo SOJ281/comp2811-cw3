@@ -52,7 +52,7 @@ void PlaylistsWindow::arrangeWidgets() {
   // Populate left toolbar
 
   // Add left toolbar to left part of the window
-  //mainLayout->addWidget(new SideBar());
+  mainLayout->addWidget(new SideBar());
 
   // Add the other parts
   mainLayout->addLayout(centerLayout);
@@ -160,11 +160,4 @@ void PlaylistsWindow::deleteLayout(QLayout *layout) {
 
   // Finally, delete the layout
   delete layout;
-}
-
-void PlaylistsWindow::disapear() {
-    hide();
-}
-void PlaylistsWindow::showIt() {
-    show();
 }

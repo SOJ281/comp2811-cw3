@@ -7,6 +7,7 @@
 
 #include <QWidget>
 #include "the_button.h"
+//#include <QScrollArea>
 
 
 //Window inside scroll area

@@ -31,8 +31,7 @@ private:
 private slots:
   void fakeSort(int index);
   void fakeFilter();
-  void disapear();
-  void showIt();
+
 signals:
 };
 
