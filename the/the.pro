@@ -9,13 +9,13 @@ CONFIG += c++11
 
 SOURCES += \
         iconlabelcontainer.cpp \
-        playerwindow.cpp \
         playlistcontainer.cpp \
         playlistswindow.cpp \
         scrollgridlayout.cpp \
         sidebar.cpp \
         the_button.cpp \
         the_player.cpp \
+        scroll_layout.cpp \
         scroll_window.cpp \
         video_scroll.cpp \
         tomeo.cpp
@@ -23,12 +23,12 @@ SOURCES += \
 HEADERS += \
     constants.h \
     iconlabelcontainer.h \
-    playerwindow.h \
     playlistcontainer.h \
     playlistswindow.h \
     scrollgridlayout.h \
     sidebar.h \
     the_button.h \
+    scroll_layout.h \
     scroll_window.h \
     video_scroll.h \
     the_player.h
@@ -50,3 +50,4 @@ DISTFILES += \
 
 RESOURCES += \
     images.qrc
+
