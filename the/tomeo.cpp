@@ -32,6 +32,10 @@
 #include <QFont>
 #include <QRect>
 #include "video_scroll.h"
+#include "playlistswindow.h"
+#include "playerwindow.h"
+#include "sidebar.h"
+#include "iconlabelcontainer.h"
 
 // read in videos and thumbnails to this directory
 std::vector<TheButtonInfo> getInfoIn (std::string loc) {
@@ -104,202 +108,52 @@ int main(int argc, char *argv[]) {
 
     // create the Qt Application
     QApplication app(argc, argv);
-
-    // collect all the videos in the folder
-    std::vector<TheButtonInfo> videos;
-
-    if (argc == 2)
-        videos = getInfoIn(std::string(argv[1])+"/videos");
-
-    if (videos.size() == 0) {
-
-        const int result = QMessageBox::question(
-                    NULL,
-                    QString("Tomeo"),
-                    QString("no videos found! download, unzip, and add command line argument to \"quoted\" file location. Download videos from Tom's OneDrive?"),
-                    QMessageBox::Yes |
-                    QMessageBox::No );
-
-        switch( result )
-        {
-        case QMessageBox::Yes:
-          QDesktopServices::openUrl(QUrl("https://leeds365-my.sharepoint.com/:u:/g/personal/scstke_leeds_ac_uk/EcGntcL-K3JOiaZF4T_uaA4BHn6USbq2E55kF_BTfdpPag?e=n1qfuN"));
-          break;
-        default:
-            break;
-        }
-        exit(-1);
-    }
-
-    // the widget that will show the video
-    QVideoWidget *videoWidget = new QVideoWidget;
-
-    // the QMediaPlayer which controls the playback
-    ThePlayer *player = new ThePlayer;
-    player->setVideoOutput(videoWidget);
-
-    // a row of buttons
-    QWidget *buttonWidget = new QWidget();
-    // a list of the buttons
-    std::vector<TheButton*> buttons;
-
-    //control buttons panel
-    std::vector<TheButtonInfo> control = getInfo(std::string(argv[1])+"/button353"); //array of buttons
-
-    //Array of buttons, order here determines order of buttons
-    std::vector<QString> buttonTypes = {"sDown", "play", "fForward", "save", "stop", "reload", "add"};
-    QHBoxLayout *leftBottom = new QHBoxLayout();
-    QHBoxLayout *leftBottomL = new QHBoxLayout();
-
-    for(QString i : buttonTypes){
-        //adding new control buttons
-        ControlButton *button = new ControlButton(buttonWidget);
-        leftBottomL->addWidget(button);
-        button->setMaximumSize(60, 60);
-        button->setMinimumSize(60, 60);
-        button->setIconSize(QSize(100, 100));
-        button->addIcon(i);
-        button->connect(button, SIGNAL(resizeEvent(QSize)), button, SLOT(square()));
-
-        //functionalities for each button
-        if (!(i.compare("play"))) {
-          button->connect(button, SIGNAL(clicked()), player, SLOT(pausePlay()));
-          button->connect(player, SIGNAL(stateChanged(QMediaPlayer::State)), button, SLOT(switching(QMediaPlayer::State)));
-        }else if (!(i.compare("fForward"))) {
-          button->connect(button, SIGNAL(clicked()), player, SLOT(play_fast()));
-        }else if (!(i.compare("sDown"))) {
-            button->connect(button, SIGNAL(clicked()), player, SLOT(re_wind()));
-        }else if (!(i.compare("stop"))) {
-          button->connect(button, SIGNAL(clicked()), player, SLOT(stop_player()));
-        }else if (!(i.compare("reload"))) {
-          button->connect(button, SIGNAL(clicked()), player, SLOT(replay()));
-        }else if (!(i.compare("save"))){
-          button->setIconSize(QSize(30, 30));
-          QWidget *dialogueBox = new QWidget;
-          QVBoxLayout *lay = new QVBoxLayout();
-          QLabel* str = new QLabel("The video is successfully saved.");
-          QFont font("Calibri Light", 16);
-          str->setFont(font);
-          lay->addWidget(str);
-
-          QPushButton *but = new QPushButton("Close");
-          but->setMinimumSize(70, 30);
-          but->setMaximumSize(70, 30);
-          lay->addWidget(but);
-
-          dialogueBox->setLayout(lay);
-          dialogueBox->setWindowTitle("Save");
-          dialogueBox->setMinimumSize(400, 100);
-          dialogueBox->show();
-          dialogueBox->hide();
-          but->connect(but, SIGNAL(clicked()), dialogueBox, SLOT(hide()));
-          button->connect(button, SIGNAL(clicked()), dialogueBox, SLOT(show())); // when clicked, tell the player to play.
-        }else if (!(i.compare("add"))) {
-          button->setIconSize(QSize(40, 40));
-          QWidget *dialogueBox = new QWidget;
-          QHBoxLayout *lay = new QHBoxLayout();
-          QLabel* title = new QLabel("Title:");
-          QFont font("Calibri Light", 16);
-          title->setFont(font);
-          title->setMinimumSize(70, 30);
-          title->setMaximumSize(70, 30);
-          lay->addWidget(title);
-          QLineEdit *reader = new QLineEdit();
-          reader->setMinimumSize(170, 30);
-          reader->setMaximumSize(170, 30);
-          lay->addWidget(reader);
-
-          QPushButton *bee = new QPushButton("Add");
-          bee->setMinimumSize(70, 30);
-          bee->setMaximumSize(70, 30);
-          //lay->addWidget(bee);
-          QVBoxLayout *backLayout = new QVBoxLayout();
-          backLayout->addLayout(lay);
-
-          QVBoxLayout *lowerLay = new QVBoxLayout();
-          for (TheButtonInfo ac : getInfo(std::string(argv[1])+"/buttons")) {
-            if(!(ac.url->fileName().compare("dragDrop.png"))) {
-              ControlButton *downButton = new ControlButton(buttonWidget);
-              downButton->setMinimumSize(400, 100);
-              downButton->setMaximumSize(400, 100);
-              downButton->init(&ac);
-              downButton->setIconSize(QSize(400, 100));
-              lowerLay->addWidget(downButton);
-            }
-          }
-          lowerLay->addWidget(bee);
-          backLayout->addLayout(lowerLay);
-
-
-          dialogueBox->setLayout(backLayout);
-          dialogueBox->setWindowTitle("Add a new video");
-          dialogueBox->setMinimumSize(400, 250);
-          dialogueBox->show();
-          dialogueBox->hide();
-          bee->connect(bee, SIGNAL(clicked()), dialogueBox, SLOT(hide()));
-          button->connect(button, SIGNAL(clicked()), dialogueBox, SLOT(show())); // when clicked, tell the player to play.
-        }
-    }
-
-    QHBoxLayout *leftBottomR = new QHBoxLayout();
-    //audio control
-    QSlider* slider = new QSlider(Qt::Horizontal);
-    slider->setRange(1, 100);
-    slider->setMaximumWidth(120);
-    slider->setMinimumWidth(80);
-    slider->setTickPosition(QSlider::TicksBothSides);
-    leftBottomR->addWidget(slider);
-    leftBottomR->setAlignment(slider, Qt::AlignRight);
-    player->connect(slider, SIGNAL(valueChanged(int)), player, SLOT(setVolume(int)));
-
-    //label shows time
-    DurLabel * duration = new DurLabel();
-    duration->setText(QString::number(player->duration()));
-    leftBottomR->addWidget(duration);
-    leftBottomR->setAlignment(duration, Qt::AlignRight);
-    player->connect(player, SIGNAL(durationChanged(qint64)), duration, SLOT (setDur(qint64)));
-    player->connect(player, SIGNAL(positionChanged(qint64)), duration, SLOT (setPos(qint64)));
-    player->connect(player, SIGNAL(positionChanged(qint64)), player, SLOT (checkTime(qint64)));
-    player->connect(player, SIGNAL(clicked()), player, SLOT (pausePlay()));
-
-    leftBottom->addLayout(leftBottomL);
-    leftBottom->addLayout(leftBottomR);
-
-    QSpacerItem *space = new QSpacerItem(60,60, QSizePolicy::MinimumExpanding);
-    leftBottomL->addItem(space);
-
-    QVBoxLayout *left = new QVBoxLayout();
-    left->addWidget(videoWidget);
-    left->addLayout(leftBottom);
-    left->setSpacing(5);
-
-    // create the 7 video buttons
-    for ( int i = 0; i < 6; i++) {
-        TheButton *button = new TheButton(buttonWidget);
-        button->connect(button, SIGNAL(jumpTo(TheButtonInfo* )), player, SLOT (jumpTo(TheButtonInfo*))); // when clicked, tell the player to play.
-        //player->connect(button, SIGNAL(clicked()), duration, SLOT (setText("nudfsgi"))); // when clicked, tell the player to play.
-        buttons.push_back(button);
-        button->setMaximumWidth(250);
-        button->init(&videos.at(i));
-    }
-
-    VideoScroll *rightScroll = new VideoScroll(QString("scroll"), &buttons, 1); //passess scroll bar data
-    rightScroll->setMinimumSize(250, 620);
-    rightScroll->setMaximumWidth(250);
-
-    // tell the player what buttons and videos are available
-    player->setContent(&buttons, & videos);
-
     // create the main window and layout
     QWidget window;
-    QHBoxLayout *top = new QHBoxLayout();
-    window.setLayout(top);
-    window.setWindowTitle("tomeo");
-    window.setMinimumSize(800, 680);
+    QHBoxLayout *primeWindow = new QHBoxLayout();
+    window.setLayout(primeWindow);
 
-    // add the video and the buttons to the top level widget
-    top->addLayout(left);
-    top->addWidget(rightScroll);
+    PlayerWindow videoWindow;
+    videoWindow.assemble(argc, argv);
+
+    PlaylistsWindow playlistWindow;
+    playlistWindow.hide();
+
+    window.setWindowTitle("Tomeo");
+    window.setMinimumSize(1000, 680);
+    ControlButton* menu = new ControlButton(new QWidget());
+    QHBoxLayout *menLay = new QHBoxLayout();
+    //menu->setMaximumSize(30, 20);
+    //menu->setMinimumSize(30, 20);
+    menLay->setContentsMargins(0, 0, 0, 0);
+
+    menLay->addWidget(menu);
+    primeWindow->addLayout(menLay);
+
+
+    SideBar * bar = new SideBar();
+    bar->hide();
+    bar->edit->hide();
+
+    menu->connect(menu, SIGNAL(clicked()), bar, SLOT (showIt()));
+    menu->connect(menu, SIGNAL(clicked()), menu, SLOT (disapear()));
+    bar->quit->connect(bar->quit, SIGNAL(clicked()), menu, SLOT (showIt()));
+    bar->quit->connect(bar->quit, SIGNAL(clicked()), bar, SLOT (disapear()));
+
+    bar->playingNow->connect(bar->playingNow, SIGNAL(clicked()), &playlistWindow, SLOT (disapear()));
+    bar->playingNow->connect(bar->playingNow, SIGNAL(clicked()), &videoWindow, SLOT (showIt()));
+    bar->playingNow->connect(bar->playingNow, SIGNAL(clicked()), bar->quit, SLOT (showIt()));
+    bar->playingNow->connect(bar->playingNow, SIGNAL(clicked()), bar->edit, SLOT (disapear()));
+
+    bar->playlists->connect(bar->playlists, SIGNAL(clicked()), &playlistWindow, SLOT (showIt()));
+    bar->playlists->connect(bar->playlists, SIGNAL(clicked()), &videoWindow, SLOT (disapear()));
+    bar->playlists->connect(bar->playlists, SIGNAL(clicked()), bar->quit, SLOT (disapear()));
+    bar->playlists->connect(bar->playlists, SIGNAL(clicked()), bar->edit, SLOT (showIt()));
+
+
+    primeWindow->addWidget(bar);
+    primeWindow->addWidget(&videoWindow);
+    primeWindow->addWidget(&playlistWindow);
 
     // showtime!
     window.show();

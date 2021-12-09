@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/myplaylist/icons">
+        <file>icons/icons8-circled-play-24.png</file>
+        <file>icons/icons8-close-24.png</file>
+        <file>icons/icons8-laptop-play-video-24.png</file>
+        <file>icons/icons8-video-playlist-24.png</file>
+        <file>icons/icons8-playlist-24.png</file>
+        <file>icons/icons8-playlistedit-24.png</file>
+        <file>icons/icons8-video-playlist-100.png</file>
+        <file>icons/icons8-play-48.png</file>
+    </qresource>
+</RCC>

@@ -8,6 +8,12 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        iconlabelcontainer.cpp \
+        playerwindow.cpp \
+        playlistcontainer.cpp \
+        playlistswindow.cpp \
+        scrollgridlayout.cpp \
+        sidebar.cpp \
         the_button.cpp \
         the_player.cpp \
         scroll_layout.cpp \
@@ -16,6 +22,13 @@ SOURCES += \
         tomeo.cpp
 
 HEADERS += \
+    constants.h \
+    iconlabelcontainer.h \
+    playerwindow.h \
+    playlistcontainer.h \
+    playlistswindow.h \
+    scrollgridlayout.h \
+    sidebar.h \
     the_button.h \
     scroll_layout.h \
     scroll_window.h \
@@ -37,5 +50,6 @@ DISTFILES += \
     buttons/sDown.png \
     buttons/stop.png
 
-RESOURCES +=
+RESOURCES += \
+    images.qrc
 

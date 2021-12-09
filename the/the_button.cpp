@@ -79,3 +79,10 @@ void ControlButton::clicked() {
     emit jumpTo(info);
 }
 
+void ControlButton::disapear() {
+    hide();
+}
+void ControlButton::showIt() {
+    show();
+}
+

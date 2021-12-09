@@ -60,7 +60,8 @@ public:
 private slots:
     void clicked();
     void switching(QMediaPlayer::State state);
-
+    void disapear();
+    void showIt();
 signals:
 };
 
