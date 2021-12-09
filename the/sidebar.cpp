@@ -28,18 +28,22 @@ void SideBar::arrangeWidgets() {
 
   // Note: stretch is used to make the items vertically centered
   leftToolBar->addStretch(1);
-  leftToolBar->addWidget(
-      new IconLabelContainer("Playing now", ":/myplaylist/icons/icons/icons8-circled-play-24.png"));
-  leftToolBar->addWidget(
-      new IconLabelContainer("Videos", ":/myplaylist/icons/icons/icons8-laptop-play-video-24.png"));
-  leftToolBar->addWidget(
-      new IconLabelContainer("Playlists", ":/myplaylist/icons/icons/icons8-playlist-24.png"));
-  leftToolBar->addWidget(new IconLabelContainer(
-      "Playlist edit", ":/myplaylist/icons/icons/icons8-playlistedit-24.png"));
-  leftToolBar->addWidget(
-      new IconLabelContainer("Quit", ":/myplaylist/icons/icons/icons8-close-24.png"));
+  leftToolBar->addWidget(playingNow);
+  leftToolBar->addWidget(videos);
+  leftToolBar->addWidget(playlists);
+  leftToolBar->addWidget(edit);
+  leftToolBar->addWidget(quit);
   leftToolBar->addStretch(1);
 }
+
+void SideBar::showIt() {
+    show();
+}
+
+void SideBar::disapear() {
+    hide();
+}
+
 
 // unused
 void SideBar::makeConnections() {}

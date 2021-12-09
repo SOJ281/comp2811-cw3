@@ -6,7 +6,6 @@
 #include "video_scroll.h"
 
 #include "scroll_window.h"
-#include "scroll_layout.h"
 
 
 //Constructors for ResponsiveScroll, same set up as label

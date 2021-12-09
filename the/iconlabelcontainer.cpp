@@ -18,3 +18,14 @@ IconLabelContainer::IconLabelContainer(QString text, QString imagePath, QWidget 
   container->addWidget(icon);
   container->addWidget(label);
 }
+
+void IconLabelContainer::mousePressEvent(QMouseEvent* event) {
+    emit clicked();
+}
+
+void IconLabelContainer::disapear() {
+    hide();
+}
+void IconLabelContainer::showIt() {
+    show();
+}

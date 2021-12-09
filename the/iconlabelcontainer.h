@@ -18,7 +18,13 @@ private:
   QLabel *label;
 
 signals:
+  void clicked();
 public slots:
+private slots:
+  void disapear();
+  void showIt();
+protected:
+    void mousePressEvent(QMouseEvent* event);
 };
 
 #endif // ICONLABELCONTAINER_H
