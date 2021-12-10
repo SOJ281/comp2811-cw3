@@ -4,7 +4,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-SideBar::SideBar(QWidget *parent) : QWidget(parent) {
+SideBar::SideBar(QFrame *parent) : QFrame(parent) {
   createWidgets();
   arrangeWidgets();
   makeConnections();
@@ -14,6 +14,7 @@ void SideBar::createWidgets() { horizontal = new QHBoxLayout(); }
 
 void SideBar::arrangeWidgets() {
   // Divide window in left toolbar area and remaining area
+  setStyleSheet("background-color: orange");
   horizontal = new QHBoxLayout(this);
   horizontal->setContentsMargins(0, 0, 0, 0);
   // horizontal->setSpacing(0);
