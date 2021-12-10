@@ -14,5 +14,6 @@
         <file>icons/icons8-play-48.png</file>
         <file>icons/icons8-video-playlist-100.png</file>
         <file>icons/icons8-pause-38.png</file>
+        <file>icons/icons8-search-38.png</file>
     </qresource>
 </RCC>
