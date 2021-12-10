@@ -10,7 +10,7 @@
 PlaylistContainer::PlaylistContainer(QString playlistName, int videosCount, QString imagePath,
                                      QFrame *parent) {
   setStyleSheet(".QFrame{border: 1px solid black; border-radius: 5px; margin-bottom: 5px; "
-                "margin-right: 5px;}");
+                "margin-right: 5px; background-color:#ffe0ba}");
   // this->setFrameStyle(QFrame::Panel);
   // Main container
   container = new QVBoxLayout(this);
@@ -31,11 +31,13 @@ PlaylistContainer::PlaylistContainer(QString playlistName, int videosCount, QStr
     image.load(":/myplaylist/icons/icons/icons8-video-playlist-100.png");
 
   thumbnail = new QLabel();
+  thumbnail->setStyleSheet("background-color: #ffe0ba;");
   thumbnail->setPixmap(image);
   container->addWidget(thumbnail);
   container->setAlignment(thumbnail, Qt::AlignCenter);
 
   playbutton = new QPushButton();
+  playbutton->setStyleSheet("background-color: #ffe0ba;");
   playbutton->setCursor(Qt::PointingHandCursor);
   playbutton->setStyleSheet("border: none");
 
@@ -44,13 +46,17 @@ PlaylistContainer::PlaylistContainer(QString playlistName, int videosCount, QStr
   playbutton->setIconSize(playIcon.rect().size());
 
   name = new QLabel(playlistName);
+  name->setStyleSheet("background-color: #ffe0ba;");
   counter = new QLabel(QString::number(videosCount) + " items");
+  counter->setStyleSheet("background-color: #ffe0ba;");
 
   // Arrange the layout of the container
-  auto *bottom = new QHBoxLayout();
+  QWidget *bg = new QWidget();
+  bg->setStyleSheet("background-color: #ffe0ba;");
+  auto *bottom = new QHBoxLayout(bg);
   auto *bottomLeft = new QVBoxLayout();
 
-  container->addLayout(bottom);
+  container->addWidget(bg);
 
   bottomLeft->addStretch();
   bottomLeft->addWidget(name);

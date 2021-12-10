@@ -46,6 +46,7 @@ int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
     // create the main window and layout
     QWidget window;
+    window.setStyleSheet("background-color: #ffc070;");
     QHBoxLayout *primeWindow = new QHBoxLayout();
     window.setLayout(primeWindow);
 
@@ -58,6 +59,7 @@ int main(int argc, char *argv[]) {
     window.setWindowTitle("Tomeo");
     window.setMinimumSize(1000, 680);
     ControlButton* menu = new ControlButton(new QWidget());
+    menu->setStyleSheet("background-color:#ffe0ba");
     QHBoxLayout *menLay = new QHBoxLayout();
     //menu->setMaximumSize(30, 20);
     //menu->setMinimumSize(30, 20);
@@ -91,7 +93,7 @@ int main(int argc, char *argv[]) {
     bar->playlists->connect(bar->playlists, SIGNAL(clicked()), bar->playingNow, SLOT (showIt()));
     bar->playlists->connect(bar->playlists, SIGNAL(clicked()), bar->playlists, SLOT (disapear()));
 
-
+    //place side bar in seperate layout/widget
     primeWindow->addWidget(bar);
     primeWindow->addWidget(&videoWindow);
     primeWindow->addWidget(&playlistWindow);

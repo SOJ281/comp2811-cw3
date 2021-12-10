@@ -134,6 +134,7 @@ void PlayerWindow::assemble(int argc, char *argv[]) {
 
     // a row of buttons
     QWidget *buttonWidget = new QWidget();
+
     // a list of the buttons
     std::vector<TheButton*> buttons;
 
@@ -148,6 +149,7 @@ void PlayerWindow::assemble(int argc, char *argv[]) {
     for(QString i : buttonTypes){
         //adding new control buttons
         ControlButton *button = new ControlButton(buttonWidget);
+        button->setStyleSheet("background-color:#ffe0ba");
         leftBottomL->addWidget(button);
         button->setMaximumSize(45, 45);
         button->setMinimumSize(45, 45);
@@ -168,6 +170,7 @@ void PlayerWindow::assemble(int argc, char *argv[]) {
         }else if (!(i.compare("save"))){
           button->setIconSize(QSize(30, 30));
           QWidget *dialogueBox = new QWidget;
+          dialogueBox->setStyleSheet("background-color:#ffc070");
           QVBoxLayout *lay = new QVBoxLayout();
           QHBoxLayout *lay1 = new QHBoxLayout();
           lay->addLayout(lay1);
@@ -179,6 +182,7 @@ void PlayerWindow::assemble(int argc, char *argv[]) {
           //title1->setFont(font);
           lay1->addWidget(title1);
           QLineEdit *reader1 = new QLineEdit();
+          reader1->setStyleSheet("background-color:white");
           reader1->setMinimumSize(200, 30);
           lay1->addWidget(reader1);
 
@@ -186,10 +190,12 @@ void PlayerWindow::assemble(int argc, char *argv[]) {
           //title2->setFont(font);
           lay2->addWidget(title2);
           QLineEdit *reader2 = new QLineEdit();
+          reader2->setStyleSheet("background-color:white");
           reader2->setMinimumSize(200, 30);
           lay2->addWidget(reader2);
 
           QPushButton *but = new QPushButton("Save");
+          but->setStyleSheet("background-color:#ffe0ba");
           but->setMinimumSize(70, 30);
           but->setMaximumSize(70, 30);
           lay->addWidget(but);
@@ -199,6 +205,7 @@ void PlayerWindow::assemble(int argc, char *argv[]) {
           dialogueBox->setMinimumSize(400, 170);
 
           QWidget *prompt = new QWidget();
+          prompt->setStyleSheet("background-color:#ffc070");
           QHBoxLayout *promptLay = new QHBoxLayout();
           QLabel *message = new QLabel("Video saved successfully");
           promptLay->addWidget(message);
@@ -212,6 +219,7 @@ void PlayerWindow::assemble(int argc, char *argv[]) {
         }else if (!(i.compare("add"))) {
           button->setIconSize(QSize(40, 40));
           QWidget *dialogueBox = new QWidget;
+          dialogueBox->setStyleSheet("background-color:#ffc070");
           QHBoxLayout *lay = new QHBoxLayout();
           QLabel* title = new QLabel("Title:");
           //QFont font("Calibri Light", 16);
@@ -220,11 +228,13 @@ void PlayerWindow::assemble(int argc, char *argv[]) {
           title->setMaximumSize(70, 30);
           lay->addWidget(title);
           QLineEdit *reader = new QLineEdit();
+          reader->setStyleSheet("background-color:white");
           reader->setMinimumSize(170, 30);
           reader->setMaximumSize(170, 30);
           lay->addWidget(reader);
 
           QPushButton *bee = new QPushButton("Add");
+          bee->setStyleSheet("background-color:#ffe0ba");
           bee->setMinimumSize(70, 30);
           bee->setMaximumSize(70, 30);
           //lay->addWidget(bee);
@@ -253,6 +263,7 @@ void PlayerWindow::assemble(int argc, char *argv[]) {
           dialogueBox->hide();
 
           QWidget *prompt = new QWidget();
+          prompt->setStyleSheet("background-color:#ffc070");
           QHBoxLayout *promptLay = new QHBoxLayout();
           QLabel *message = new QLabel("Video added successfully");
           promptLay->addWidget(message);
@@ -269,6 +280,7 @@ void PlayerWindow::assemble(int argc, char *argv[]) {
     QHBoxLayout *leftBottomR = new QHBoxLayout();
     //audio control
     QSlider* slider = new QSlider(Qt::Horizontal);
+    //////////////////////////////////slider->setStyleSheet("background-color:#ffc070");
     slider->setRange(1, 100);
     slider->setMaximumWidth(100);
     slider->setMinimumWidth(80);
@@ -279,6 +291,7 @@ void PlayerWindow::assemble(int argc, char *argv[]) {
 
     //label shows time
     DurLabel * duration = new DurLabel();
+    ////////////////////////////////////duration->setStyleSheet("background-color:#ffc070");
     duration->setText(QString::number(player->duration()));
     duration->setMaximumHeight(60);
     duration->setMinimumSize(60,60);
@@ -304,6 +317,7 @@ void PlayerWindow::assemble(int argc, char *argv[]) {
     // create the 7 video buttons
     for ( int i = 0; i < 6; i++) {
         TheButton *button = new TheButton(buttonWidget);
+        button->setStyleSheet("background-color:#ffe0ba");
         button->connect(button, SIGNAL(jumpTo(TheButtonInfo* )), player, SLOT (jumpTo(TheButtonInfo*))); // when clicked, tell the player to play.
         //player->connect(button, SIGNAL(clicked()), duration, SLOT (setText("nudfsgi"))); // when clicked, tell the player to play.
         buttons.push_back(button);
@@ -312,6 +326,7 @@ void PlayerWindow::assemble(int argc, char *argv[]) {
     }
 
     VideoScroll *rightScroll = new VideoScroll(QString("scroll"), &buttons, 1); //passess scroll bar data
+    rightScroll->setStyleSheet("background-color:#ff9919");
     rightScroll->setMinimumSize(258, 620);
     rightScroll->setMaximumWidth(258);
 

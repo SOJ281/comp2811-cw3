@@ -23,19 +23,20 @@ void PlaylistsWindow::createWidgets() {
                          "Sort by: video count"};
   sort->addItems(list);
   sort->setFixedSize(130, 36);
-  sort->setStyleSheet("QComboBox {border: 1px solid; border-radius: 4px;}");
+  sort->setStyleSheet("QComboBox {border: 1px solid; border-radius: 4px; background-color: #ffe0ba;} QComboBox QAbstractItemView {background-color: #ffe0ba;};");
 
   searchQuery = new QLineEdit();
   searchQuery->setFixedHeight(36);
   searchQuery->setStyleSheet("border: 1px solid; border-radius: 4px; border-top-right-radius: 0px; "
-                             "border-bottom-right-radius: 0px;");
+                             "border-bottom-right-radius: 0px; background-color: white;");
 
   search = new QPushButton("Search");
   search->setFixedSize(40, 36);
   search->setStyleSheet("border: 1px solid; border-radius: 4px; border-left: 0px; "
-                        "border-top-left-radius: 0px; border-bottom-left-radius: 0px;");
+                        "border-top-left-radius: 0px; border-bottom-left-radius: 0px;background-color:#ffe0ba;");
 
   scroll = new QScrollArea();
+  scroll->setStyleSheet("background-color: #ffc070;");
   scrollAreaContents = new QWidget();
   scroll->setFrameShape(QFrame::NoFrame);
   scroll->setWidgetResizable(true);
