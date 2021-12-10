@@ -11,7 +11,7 @@ IconLabelContainer::IconLabelContainer(QString text, QString imagePath, QWidget 
   container->setContentsMargins(0, 20, 20, 0);
 
   icon = new QLabel();
-  icon->setFixedSize(24, 24);
+  icon->setFixedSize(38, 38);
   icon->setPixmap(QPixmap(imagePath));
   label = new QLabel(text);
 

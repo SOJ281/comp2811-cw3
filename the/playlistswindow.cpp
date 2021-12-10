@@ -22,16 +22,21 @@ void PlaylistsWindow::createWidgets() {
   const QStringList list{"Sort by: name", "Sort by: creation date", "Sort by: last played",
                          "Sort by: video count"};
   sort->addItems(list);
-  sort->setFixedSize(130, 36);
+  sort->setFixedSize(130, 40);
   sort->setStyleSheet("QComboBox {border: 1px solid; border-radius: 4px; background-color: #ffe0ba;} QComboBox QAbstractItemView {background-color: #ffe0ba;};");
 
   searchQuery = new QLineEdit();
-  searchQuery->setFixedHeight(36);
+  searchQuery->setFixedHeight(40);
   searchQuery->setStyleSheet("border: 1px solid; border-radius: 4px; border-top-right-radius: 0px; "
                              "border-bottom-right-radius: 0px; background-color: white;");
 
-  search = new QPushButton("Search");
-  search->setFixedSize(40, 36);
+  search = new QPushButton("");
+  search->setCursor(Qt::PointingHandCursor);
+  QPixmap searchIcon(":/myplaylist/icons/icons/icons8-search-38.png");
+  search->setIcon(searchIcon);
+  search->setIconSize(searchIcon.rect().size());
+
+  search->setFixedSize(45, 40);
   search->setStyleSheet("border: 1px solid; border-radius: 4px; border-left: 0px; "
                         "border-top-left-radius: 0px; border-bottom-left-radius: 0px;background-color:#ffe0ba;");
 

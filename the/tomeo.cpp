@@ -58,40 +58,21 @@ int main(int argc, char *argv[]) {
 
     window.setWindowTitle("Tomeo");
     window.setMinimumSize(1000, 680);
-    ControlButton* menu = new ControlButton(new QWidget());
-    menu->setStyleSheet("background-color:#ffe0ba");
     QHBoxLayout *menLay = new QHBoxLayout();
-    //menu->setMaximumSize(30, 20);
-    //menu->setMinimumSize(30, 20);
     menLay->setContentsMargins(0, 0, 0, 0);
 
-    menLay->addWidget(menu);
     primeWindow->addLayout(menLay);
 
 
     SideBar * bar = new SideBar();
-    bar->hide();
-    bar->edit->hide();
-    bar->playingNow->hide();
 
-    menu->connect(menu, SIGNAL(clicked()), bar, SLOT (showIt()));
-    menu->connect(menu, SIGNAL(clicked()), menu, SLOT (disapear()));
-    bar->quit->connect(bar->quit, SIGNAL(clicked()), menu, SLOT (showIt()));
-    bar->quit->connect(bar->quit, SIGNAL(clicked()), bar, SLOT (disapear()));
+    // bar->quit->connect(bar->quit, SIGNAL(clicked()), bar, SLOT(disapear()));
 
     bar->playingNow->connect(bar->playingNow, SIGNAL(clicked()), &playlistWindow, SLOT (disapear()));
     bar->playingNow->connect(bar->playingNow, SIGNAL(clicked()), &videoWindow, SLOT (showIt()));
-    bar->playingNow->connect(bar->playingNow, SIGNAL(clicked()), bar->quit, SLOT (showIt()));
-    bar->playingNow->connect(bar->playingNow, SIGNAL(clicked()), bar->edit, SLOT (disapear()));
-    bar->playingNow->connect(bar->playingNow, SIGNAL(clicked()), bar->playingNow, SLOT (disapear()));
-    bar->playingNow->connect(bar->playingNow, SIGNAL(clicked()), bar->playlists, SLOT (showIt()));
 
     bar->playlists->connect(bar->playlists, SIGNAL(clicked()), &playlistWindow, SLOT (showIt()));
     bar->playlists->connect(bar->playlists, SIGNAL(clicked()), &videoWindow, SLOT (disapear()));
-    bar->playlists->connect(bar->playlists, SIGNAL(clicked()), bar->quit, SLOT (disapear()));
-    bar->playlists->connect(bar->playlists, SIGNAL(clicked()), bar->edit, SLOT (showIt()));
-    bar->playlists->connect(bar->playlists, SIGNAL(clicked()), bar->playingNow, SLOT (showIt()));
-    bar->playlists->connect(bar->playlists, SIGNAL(clicked()), bar->playlists, SLOT (disapear()));
 
     //place side bar in seperate layout/widget
     primeWindow->addWidget(bar);

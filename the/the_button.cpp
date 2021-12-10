@@ -27,41 +27,45 @@ void ControlButton::init(TheButtonInfo* i) {
 
 //get icon for each control button
 void ControlButton::addIcon(QString str) {
-    setWhatsThis(str);
-    if (!str.compare("sDown")){
-        setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
-    }
-    else if (!str.compare("play")){
-        setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-    }
-    else if (!str.compare("fForward")){
-        setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
-    }
-    else if (!str.compare("save")){
-        setIcon(style()->standardIcon(QStyle::SP_DialogSaveButton));
-    }
-    else if (!str.compare("stop")){
-        setIcon(style()->standardIcon(QStyle::SP_MediaStop));
-    }
-    else if (!str.compare("reload")){
-        setIcon(style()->standardIcon(QStyle::SP_BrowserReload));
-    }
-    else if (!str.compare("add")){
-        setIcon(style()->standardIcon(QStyle::SP_ArrowUp));
-    }
+  setWhatsThis(str);
+  // playbutton->setIcon(playIcon);
+  // playbutton->setIconSize(playIcon.rect().size());
+  QPixmap myIcon;
+  if (!str.compare("sDown")) {
+    myIcon.load(":/myplaylist/icons/icons/icons8-rewind-38.png");
+  } else if (!str.compare("play")) {
+    myIcon.load(":/myplaylist/icons/icons/icons8-play-38.png");
+  } else if (!str.compare("fForward")) {
+    myIcon.load(":/myplaylist/icons/icons/icons8-fast-forward-38.png");
+  } else if (!str.compare("save")) {
+    myIcon.load(":/myplaylist/icons/icons/icons8-save-38.png");
+  } else if (!str.compare("stop")) {
+    myIcon.load(":/myplaylist/icons/icons/icons8-stop-38.png");
+  } else if (!str.compare("reload")) {
+    myIcon.load(":/myplaylist/icons/icons/icons8-refresh-38.png");
+  } else if (!str.compare("add")) {
+    myIcon.load(":/myplaylist/icons/icons/icons8-upload-38.png");
+  }
+  setIcon(myIcon);
+  setIconSize(myIcon.rect().size());
 }
 
 void ControlButton::switching(QMediaPlayer::State state) {
-    switch (state) {
-      case QMediaPlayer::State::PausedState:
-        setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-        break;
-      case QMediaPlayer::PlayingState:
-        setIcon(style()->standardIcon(QStyle::SP_MediaPause));
-        break;
-      default:
-        break;
-    }
+  QPixmap pauseIcon(":/myplaylist/icons/icons/icons8-pause-38.png");
+  QPixmap playIcon(":/myplaylist/icons/icons/icons8-play-38.png");
+  switch (state) {
+
+  case QMediaPlayer::State::PausedState:
+    setIcon(playIcon);
+    setIconSize(playIcon.rect().size());
+    break;
+  case QMediaPlayer::PlayingState:
+    setIcon(pauseIcon);
+    setIconSize(pauseIcon.rect().size());
+    break;
+  default:
+    break;
+  }
 }
 
 void ControlButton::clicked() {
